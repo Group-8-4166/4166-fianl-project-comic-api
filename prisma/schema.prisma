@@ -5,11 +5,72 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
+  // output = "../generated"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Comic {
+  id           Int       @id @default(autoincrement())
+  title        String
+  author       String
+  publisher    String
+  releaseYear  Int
+  description  String
+  createdAt    DateTime  @default(now()) @map("created_at")
+  genre        Genre?    @relation(fields: [genreId], references: [id], onDelete: Cascade)
+  genreId      Int?
+  ratings      Rating[]  @relation("ComicRatings")
+  reading      ReadingList[]
+  @@map("comics")
+}
+
+model Genre {
+  id     Int     @id @default(autoincrement())
+  genre  String
+  comics Comic[]
+  @@map("genres")
+}
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  description String?
+  createdAt DateTime @default(now()) @map("created_at")
+  author    User     @relation("UserRatings", fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  comic     Comic    @relation("ComicRatings", fields: [comicId], references: [id], onDelete: Cascade)
+  comicId   Int
+  @@unique([userId, comicId])
+  @@map("ratings")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  role     Role     @default(USER)
+  ratings  Rating[] @relation("UserRatings")
+  reading  ReadingList[]
+  @@map("users")
+}
+
+model ReadingList {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
+  comic   Comic @relation(fields: [comicId], references: [id], onDelete: Cascade)
+  comicId Int
+  createdAt DateTime @default(now()) @map("created_at")
+  @@unique([userId, comicId])
+  @@map("reading_list")
+}
+
+enum Role {
+  USER
+  ADMIN
+} 

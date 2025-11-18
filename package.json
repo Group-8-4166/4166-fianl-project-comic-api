@@ -1,30 +1,51 @@
 {
-  "name": "final-project-template",
+  "name": "comicbook-api",
   "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
-  "type": "module",
-  "main": "index.js",
+  "description": "ComicBook REST API",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "node --env-file=.env --watch src/server.js"
+    "dev": "NODE_ENV=development nodemon src/server.js",
+    "start": "node src/server.js",
+    "prisma:migrate": "npx prisma migrate dev --name init",
+    "prisma:generate": "npx prisma generate",
+    "bundle:openapi": "npx @redocly/cli bundle src/docs/openapi.yaml -o public/bundled.yaml",
+    "seed": "node scripts/seeds.js",
+    "migrate:reset": "npx prisma migrate reset --force"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
   "devDependencies": {
-    "@eslint/js": "^9.29.0",
-    "eslint": "^9.29.0",
-    "eslint-config-prettier": "^10.1.5",
-    "globals": "^16.2.0",
-    "prettier": "^3.6.1",
-    "prisma": "^6.12.0",
-    "supertest": "^7.1.4"
+    "@eslint/js": "^9.39.1",
+    "@redocly/cli": "^2.11.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.5.0",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "prisma": "^6.19.0"
   },
   "dependencies": {
-    "morgan": "^1.10.0",
-    "@prisma/client": "^6.12.0",
+    "@prisma/client": "^6.19.0",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "express-validator": "^7.2.1",
-    "jsonwebtoken": "^9.0.2"
-  }
+    "express-rate-limit": "^8.1.0",
+    "express-validator": "^7.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Group-8-4166/4166-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Group-8-4166/4166-project/issues"
+  },
+  "homepage": "https://github.com/Group-8-4166/4166-project#readme"
 }
