@@ -1,0 +1,35 @@
+get:
+  tags:
+    - reading-list
+  summary: Get reading list for the logged-in user
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Reading list items for the authenticated user
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/ReadingEntry.yaml
+post:
+  tags:
+    - reading-list
+  summary: Add a comic to the reading list
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - comicId
+          properties:
+            comicId:
+              type: integer
+  responses:
+    '201':
+      description: Comic added to reading list

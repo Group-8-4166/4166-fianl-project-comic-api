@@ -1,0 +1,29 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 10
+  userId:
+    type: integer
+    example: 13
+  comicId:
+    type: integer
+    example: 14
+  createdAt:
+    type: string
+    format: date-time
+  comic:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      author:
+        type: string
+      publisher:
+        type: string
+      releaseYear:
+        type: integer
+      description:
+        type: string
