@@ -1,0 +1,38 @@
+get:
+  tags:
+    - ratings
+  summary: Retrieve all ratings
+  responses:
+    '200':
+      description: List of ratings with user and comic info
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/Rating.yaml
+post:
+  tags:
+    - ratings
+  summary: Create a rating (Authenticated users only)
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - comicId
+            - rating
+          properties:
+            comicId:
+              type: integer
+            rating:
+              type: integer
+            description:
+              type: string
+  responses:
+    '201':
+      description: Rating created successfully
