@@ -1,26 +1,36 @@
 openapi: 3.1.0
+
 info:
   title: ComicBook API
   version: 1.0.0
   description: |
-    REST API for browsing, managing, and rating comics.   Supports authentication, role-based authorization, CRUD for comics, genres, ratings, and user reading lists.
+    A REST API for browsing, managing, and rating comic books. 
+    Provides user authentication, role-based authorization, and full CRUD capabilities 
+    for comics, genres, ratings, and user reading lists.
+
 servers:
   - url: http://localhost:8080
     description: Local development server
   - url: https://your-render-app.onrender.com
-    description: Render deployment
+    description: Render deployment environment
+
 paths:
+
+  # -------------------------
+  # AUTHENTICATION
+  # -------------------------
   /api/auth/signup:
     post:
-      tags:
-        - auth
+      tags: [auth]
       summary: Register a new user
+      description: Creates a new user account using email and password.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required: [email, password]
               properties:
                 email:
                   type: string
@@ -28,18 +38,20 @@ paths:
                   type: string
       responses:
         '201':
-          description: New user created
+          description: User successfully registered
+
   /api/auth/login:
     post:
-      tags:
-        - auth
+      tags: [auth]
       summary: Login and receive a JWT token
+      description: Authenticates a user and returns an access token for future requests.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required: [email, password]
               properties:
                 email:
                   type: string
@@ -47,7 +59,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: Returns access token
+          description: Login successful — returns JWT access token
           content:
             application/json:
               schema:
@@ -55,13 +67,14 @@ paths:
                 properties:
                   accessToken:
                     type: string
+
   /api/auth/logout:
     post:
-      tags:
-        - auth
-      summary: Logout the user (invalidate the current JWT)
+      tags: [auth]
+      summary: Logout the user
       description: |
-        Logs out the currently authenticated user by invalidating their JWT token. Requires the Authorization header with a valid Bearer token.
+        Invalidates the currently authenticated user's JWT token.  
+        Requires a valid Bearer token.
       security:
         - bearerAuth: []
       responses:
@@ -76,7 +89,7 @@ paths:
                     type: string
                     example: Logged out successfully. Token invalidated.
         '400':
-          description: No token provided or user not logged in
+          description: No token provided or invalid request
           content:
             application/json:
               schema:
@@ -85,10 +98,13 @@ paths:
                   error:
                     type: string
                     example: You have not logged in or provided a token.
+
+  # -------------------------
+  # COMICS
+  # -------------------------
   /api/comics:
     get:
-      tags:
-        - comics
+      tags: [comics]
       summary: Retrieve all comics
       responses:
         '200':
@@ -99,9 +115,9 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comic'
+
     post:
-      tags:
-        - comics
+      tags: [comics]
       summary: Create a new comic (Admin only)
       security:
         - bearerAuth: []
@@ -111,6 +127,7 @@ paths:
           application/json:
             schema:
               type: object
+              required: [title, author, publisher, releaseYear, genre]
               properties:
                 title:
                   type: string
@@ -126,19 +143,19 @@ paths:
                   type: string
       responses:
         '201':
-          description: Comic created
+          description: Comic created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comic'
+
   /api/comics/{id}:
     get:
-      tags:
-        - comics
+      tags: [comics]
       summary: Get a comic by ID
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
           schema:
             type: integer
@@ -149,15 +166,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comic'
+
     put:
-      tags:
-        - comics
-      summary: Update a comic (Admin only)
+      tags: [comics]
+      summary: Update an existing comic (Admin only)
       security:
         - bearerAuth: []
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
           schema:
             type: integer
@@ -182,40 +199,43 @@ paths:
                   type: string
       responses:
         '200':
-          description: Comic updated
+          description: Comic updated successfully
+
     delete:
-      tags:
-        - comics
+      tags: [comics]
       summary: Delete a comic (Admin only)
       security:
         - bearerAuth: []
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
           schema:
             type: integer
       responses:
         '204':
-          description: Comic deleted
+          description: Comic deleted successfully
+
+  # -------------------------
+  # GENRES
+  # -------------------------
   /api/genres:
     get:
-      tags:
-        - genres
-      summary: Get all genres with their comics
+      tags: [genres]
+      summary: Retrieve all genres with their comics
       responses:
         '200':
-          description: List of genres with associated comics
+          description: List of genres with their associated comics
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Genre'
+
     post:
-      tags:
-        - genres
-      summary: Create a new genre (Admin only)
+      tags: [genres]
+      summary: Create a genre (Admin only)
       security:
         - bearerAuth: []
       requestBody:
@@ -224,23 +244,24 @@ paths:
           application/json:
             schema:
               type: object
+              required: [genre]
               properties:
                 genre:
                   type: string
       responses:
         '201':
-          description: Genre created
+          description: Genre created successfully
+
   /api/genres/{id}:
     get:
-      tags:
-        - genres
+      tags: [genres]
       summary: Get a genre by ID
       parameters:
-        - name: id
-          in: path
-          required: true
+        - in: path
+          name: id
           schema:
             type: integer
+          required: true
       responses:
         '200':
           description: Genre details
@@ -248,15 +269,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Genre'
+
     put:
-      tags:
-        - genres
+      tags: [genres]
       summary: Update a genre (Admin only)
       security:
         - bearerAuth: []
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
           schema:
             type: integer
@@ -271,40 +292,43 @@ paths:
                   type: string
       responses:
         '200':
-          description: Genre updated
+          description: Genre updated successfully
+
     delete:
-      tags:
-        - genres
+      tags: [genres]
       summary: Delete a genre (Admin only)
       security:
         - bearerAuth: []
       parameters:
-        - name: id
-          in: path
-          required: true
+        - in: path
+          name: id
           schema:
             type: integer
+          required: true
       responses:
         '204':
-          description: Genre deleted
+          description: Genre deleted successfully
+
+  # -------------------------
+  # RATINGS
+  # -------------------------
   /api/ratings:
     get:
-      tags:
-        - ratings
-      summary: Get all ratings
+      tags: [ratings]
+      summary: Retrieve all ratings
       responses:
         '200':
-          description: List of all ratings with author and comic info
+          description: List of ratings with user and comic info
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Rating'
+
     post:
-      tags:
-        - ratings
-      summary: Create a rating (Authenticated user)
+      tags: [ratings]
+      summary: Create a rating (Authenticated users only)
       security:
         - bearerAuth: []
       requestBody:
@@ -313,6 +337,7 @@ paths:
           application/json:
             schema:
               type: object
+              required: [comicId, rating]
               properties:
                 comicId:
                   type: integer
@@ -322,15 +347,15 @@ paths:
                   type: string
       responses:
         '201':
-          description: Rating created
+          description: Rating created successfully
+
   /api/ratings/{id}:
     get:
-      tags:
-        - ratings
+      tags: [ratings]
       summary: Get a rating by ID
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
           schema:
             type: integer
@@ -341,18 +366,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Rating'
+
     put:
-      tags:
-        - ratings
-      summary: Update a rating (Authenticated user)
+      tags: [ratings]
+      summary: Update a rating (Authenticated users only)
       security:
         - bearerAuth: []
       parameters:
-        - name: id
-          in: path
-          required: true
+        - in: path
+          name: id
           schema:
             type: integer
+          required: true
       requestBody:
         required: true
         content:
@@ -368,41 +393,44 @@ paths:
                   type: string
       responses:
         '200':
-          description: Rating updated
+          description: Rating updated successfully
+
     delete:
-      tags:
-        - ratings
-      summary: Delete a rating (Authenticated user)
+      tags: [ratings]
+      summary: Delete a rating (Authenticated users only)
       security:
         - bearerAuth: []
       parameters:
-        - name: id
-          in: path
-          required: true
+        - in: path
+          name: id
           schema:
             type: integer
+          required: true
       responses:
         '204':
-          description: Rating deleted
+          description: Rating deleted successfully
+
+  # -------------------------
+  # READING LIST
+  # -------------------------
   /api/reading-list:
     get:
-      tags:
-        - reading-list
-      summary: Get the logged-in user's reading list
+      tags: [reading-list]
+      summary: Get reading list for the logged-in user
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: List of reading list entries for the authenticated user
+          description: Reading list items for the authenticated user
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReadingEntry'
+
     post:
-      tags:
-        - reading-list
+      tags: [reading-list]
       summary: Add a comic to the reading list
       security:
         - bearerAuth: []
@@ -412,22 +440,23 @@ paths:
           application/json:
             schema:
               type: object
+              required: [comicId]
               properties:
                 comicId:
                   type: integer
       responses:
         '201':
-          description: Added to reading list
+          description: Comic added to reading list
+
   /api/reading-list/{id}:
     get:
-      tags:
-        - reading-list
+      tags: [reading-list]
       summary: Get a reading list entry by ID
       security:
         - bearerAuth: []
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
           schema:
             type: integer
@@ -438,28 +467,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReadingEntry'
+
     delete:
-      tags:
-        - reading-list
+      tags: [reading-list]
       summary: Remove a comic from the reading list
       security:
         - bearerAuth: []
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
           schema:
             type: integer
       responses:
         '204':
-          description: Reading entry deleted
+          description: Entry removed from reading list
+
 components:
+
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
   schemas:
+
     Comic:
       type: object
       properties:
@@ -468,7 +501,8 @@ components:
           example: 13
         title:
           type: string
-          example: 'Spider-Man: Into the Spider-Verse'
+          example: 
+            Spider-Man: Into the Spider-Verse
         author:
           type: string
           example: Brian Michael Bendis
@@ -487,6 +521,7 @@ components:
         description:
           type: string
           example: Miles Morales becomes the Spider-Man of his reality...
+
     Genre:
       type: object
       properties:
@@ -506,7 +541,8 @@ components:
                 example: 14
               title:
                 type: string
-                example: 'Batman: Year One'
+                example: 
+                  Batman: Year One
               author:
                 type: string
                 example: Frank Miller
@@ -519,6 +555,7 @@ components:
               description:
                 type: string
                 example: Bruce Wayne returns to Gotham City and becomes Batman...
+
     User:
       type: object
       properties:
@@ -530,10 +567,9 @@ components:
           example: test@example.com
         role:
           type: string
-          enum:
-            - USER
-            - ADMIN
+          enum: [USER, ADMIN]
           example: USER
+
     Rating:
       type: object
       properties:
@@ -570,6 +606,7 @@ components:
               type: integer
             description:
               type: string
+
     ReadingEntry:
       type: object
       properties:

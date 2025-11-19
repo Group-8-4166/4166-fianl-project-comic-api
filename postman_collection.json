@@ -1,0 +1,389 @@
+{
+  "info": {
+    "name": "ComicBook API - Collection",
+    "_postman_id": "comicbook-api-collection-4166",
+    "description": "Postman collection for ComicBook API (Comics, Genres, Ratings, ReadingList, Auth)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"newuser@example.com\",\"password\":\"password123\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "signup"]
+            }
+          }
+        },
+        {
+          "name": "Login (user)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"test@example.com\",\"password\":\"password123\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  pm.environment.set('userToken', json.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"admin@example.com\",\"password\":\"adminpass\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  pm.environment.set('adminToken', json.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Logout",
+      "item": [
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comics",
+      "item": [
+        {
+          "name": "List All Comics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/comics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comics"]
+            }
+          }
+        },
+        {
+          "name": "Get Comic By ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/comics/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comics", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Comic (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"New Comic Title\",\n  \"author\": \"Author Name\",\n  \"publisher\": \"Publisher Name\",\n  \"releaseYear\": 2023,\n  \"description\": \"Short description\",\n  \"genre\": \"Adventure\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comics"]
+            }
+          }
+        },
+        {
+          "name": "Update Comic (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"author\": \"Updated Author\",\n  \"publisher\": \"Updated Publisher\",\n  \"releaseYear\": 2024,\n  \"description\": \"Updated description\",\n  \"genre\": \"Action\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comics/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comics", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Comic (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comics/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comics", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Genres",
+      "item": [
+        {
+          "name": "List Genres",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/genres",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres"]
+            }
+          }
+        },
+        {
+          "name": "Create Genre (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"genre\": \"Horror\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/genres",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres"]
+            }
+          }
+        },
+        {
+          "name": "Update Genre (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"genre\": \"Sci-Fi\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/genres/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Genre (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/genres/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "genres", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ratings",
+      "item": [
+        {
+          "name": "List Ratings",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/ratings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ratings"]
+            }
+          }
+        },
+        {
+          "name": "Create Rating (Auth)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{userToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"comicId\": 1, \"rating\": 5, \"description\": \"Amazing\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/ratings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ratings"]
+            }
+          }
+        },
+        {
+          "name": "Update Rating (Auth)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{userToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"rating\": 4, \"description\": \"Good\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/ratings/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ratings", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Rating (Auth)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ratings/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ratings", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reading List",
+      "item": [
+        {
+          "name": "Get My Reading List",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reading-list",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reading-list"]
+            }
+          }
+        },
+        {
+          "name": "Add To Reading List",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{userToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"comicId\": 2}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reading-list",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reading-list"]
+            }
+          }
+        },
+        {
+          "name": "Remove From Reading List",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reading-list/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reading-list", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+
+
