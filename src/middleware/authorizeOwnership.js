@@ -1,8 +1,14 @@
 import { getRatingById } from "../repositories/ratingRepo.js";
 import { getReadingEntryById } from "../repositories/readingListRepo.js";
+import { validateId } from "../utils/validateId.js";
 
 export async function authorizeRatingOwnership(req, res, next) {
-  const id = parseInt(req.params.id);
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   const rating = await getRatingById(id);
   if (!rating) {
     const err = new Error("Rating not found");
@@ -18,7 +24,12 @@ export async function authorizeRatingOwnership(req, res, next) {
 }
 
 export async function authorizeReadingEntryOwnership(req, res, next) {
-  const id = parseInt(req.params.id);
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   const entry = await getReadingEntryById(id);
   if (!entry) {
     const err = new Error("Entry not found");

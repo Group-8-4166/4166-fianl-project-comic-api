@@ -5,6 +5,7 @@ import {
   putComic,
   removeComic,
 } from "../services/comicService.js";
+import { validateId } from "../utils/validateId.js";
 
 export async function createComicHandler(req, res, next) {
   try {
@@ -34,8 +35,13 @@ export async function listComicsHandler(req, res, next) {
 }
 
 export async function getComicHandler(req, res, next) {
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   try {
-    const id = parseInt(req.params.id);
     const comic = await getComic(id);
     res.status(200).json(comic);
   } catch (err) {
@@ -45,7 +51,12 @@ export async function getComicHandler(req, res, next) {
 
 export async function putComicHandler(req, res, next) {
   try {
-    const id = parseInt(req.params.id);
+    const id = validateId(req.params.id);
+    if (!id) {
+      const error = new Error("Invalid ID format. ID must be a positive integer.");
+      error.status = 400;
+      return next(error);
+    }
     const updates = {
       title: req.body.title,
       author: req.body.author,
@@ -63,8 +74,13 @@ export async function putComicHandler(req, res, next) {
 }
 
 export async function deleteComicHandler(req, res, next) {
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   try {
-    const id = parseInt(req.params.id);
     await removeComic(id);
     res.status(204).json({ message: "Comic deleted" });
   } catch (err) {

@@ -5,6 +5,7 @@ import {
   putGenre,
   removeGenre,
 } from "../services/genreService.js";
+import { validateId } from "../utils/validateId.js";
 
 export async function createGenreHandler(req, res, next) {
   try {
@@ -26,8 +27,13 @@ export async function listGenresHandler(req, res, next) {
 }
 
 export async function getGenreHandler(req, res, next) {
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   try {
-    const id = parseInt(req.params.id);
     const genre = await getGenre(id);
     res.status(200).json(genre);
   } catch (err) {
@@ -36,8 +42,13 @@ export async function getGenreHandler(req, res, next) {
 }
 
 export async function putGenreHandler(req, res, next) {
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   try {
-    const id = parseInt(req.params.id);
     const updates = {};
     if (req.body.genre) updates.genre = req.body.genre;
     const updated = await putGenre(id, updates);
@@ -48,8 +59,13 @@ export async function putGenreHandler(req, res, next) {
 }
 
 export async function deleteGenreHandler(req, res, next) {
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   try {
-    const id = parseInt(req.params.id);
     await removeGenre(id);
     res.status(204).send();
   } catch (err) {

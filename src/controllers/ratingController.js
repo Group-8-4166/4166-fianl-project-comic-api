@@ -5,11 +5,19 @@ import {
   putRating,
   removeRating,
 } from "../services/ratingService.js";
+import { validateId } from "../utils/validateId.js";
 
 export async function createRatingHandler(req, res, next) {
   try {
     const userId = req.user.id;
     const { rating, description, comicId } = req.body;
+
+    const validatedComicId = validateId(comicId);
+    if (!validatedComicId) {
+      const error = new Error("Invalid ID format. ID must be a positive integer.");
+      error.status = 400;
+      return next(error);
+    }
     const newRating = await addRating(userId, { rating, description, comicId });
     res.status(201).json(newRating);
   } catch (err) {
@@ -27,8 +35,13 @@ export async function listRatingsHandler(req, res, next) {
 }
 
 export async function getRatingHandler(req, res, next) {
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   try {
-    const id = parseInt(req.params.id);
     const rating = await getRating(id);
     res.status(200).json(rating);
   } catch (err) {
@@ -37,11 +50,17 @@ export async function getRatingHandler(req, res, next) {
 }
 
 export async function putRatingHandler(req, res, next) {
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   try {
-    const id = parseInt(req.params.id);
     const updates = {};
     if (req.body.rating !== undefined) updates.rating = req.body.rating;
     if (req.body.description !== undefined) updates.description = req.body.description;
+
     const updated = await putRating(id, updates);
     res.status(200).json(updated);
   } catch (err) {
@@ -50,10 +69,15 @@ export async function putRatingHandler(req, res, next) {
 }
 
 export async function deleteRatingHandler(req, res, next) {
+  const id = validateId(req.params.id);
+  if (!id) {
+    const error = new Error("Invalid ID format. ID must be a positive integer.");
+    error.status = 400;
+    return next(error);
+  }
   try {
-    const id = parseInt(req.params.id);
     await removeRating(id);
-    res.status(204).json({ message: "Rating deleted" });
+    res.status(204).send();
   } catch (err) {
     next(err);
   }

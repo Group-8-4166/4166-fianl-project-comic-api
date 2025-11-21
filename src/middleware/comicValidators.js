@@ -1,11 +1,3 @@
-// import { body } from "express-validator";
-// import { handleValidationErrors } from "./handleValidationErrors.js";
-
-// export const validateComic = [
-//   body("title").exists({ checkFalsy: true }).withMessage("Title required"),
-//   body("content").exists({ checkFalsy: true }).withMessage("Content required"),
-//   handleValidationErrors,
-// ];
 
 import { body } from "express-validator";
 import { handleValidationErrors } from "./handleValidationErrors.js";
