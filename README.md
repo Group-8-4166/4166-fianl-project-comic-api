@@ -201,7 +201,7 @@ git push origin main
 - Connect your GitHub repository  
 - Set Build Command:
   ```bash
-  npm install && npx prisma migrate deploy && npx prisma generate && node prisma/seeds.js
+  npm install && npx prisma migrate deploy && npx prisma generate && node scripts/seeds.js
   ```
 - Set Start Command:
   ```bash
