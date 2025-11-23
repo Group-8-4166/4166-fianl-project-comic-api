@@ -30,6 +30,15 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
+// Swagger/OpenAPI
+// const openapiDoc = YAML.load(path.join(__dirname, "../public/bundled.yaml"));
+// app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
+
+const openapiDoc = YAML.load(
+  path.join(projectRoot, "/public", "bundled.yaml")
+);
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
@@ -42,15 +51,6 @@ app.use("/api/ratings", ratingRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/reading-list", readingListRoutes);
-
-// Swagger/OpenAPI
-// const openapiDoc = YAML.load(path.join(__dirname, "../public/bundled.yaml"));
-// app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
-
-const openapiDoc = YAML.load(
-  path.join(projectRoot, "/public", "bundled.yaml")
-);
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
 
 // 404 handler
 app.use((req, res, next) => {
