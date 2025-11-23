@@ -1,0 +1,45 @@
+openapi: 3.1.0
+info:
+  title: ComicBook API
+  version: 1.0.0
+  description: >
+    A REST API for browsing, managing, and rating comic books. 
+
+    Provides user authentication, role-based authorization, and full CRUD
+    capabilities 
+
+    for comics, genres, ratings, and user reading lists.
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://your-render-app.onrender.com
+    description: Render deployment environment
+paths:
+  /api/auth/signup:
+    $ref: paths/api_auth_signup.yaml
+  /api/auth/login:
+    $ref: paths/api_auth_login.yaml
+  /api/auth/logout:
+    $ref: paths/api_auth_logout.yaml
+  /api/comics:
+    $ref: paths/api_comics.yaml
+  /api/comics/{id}:
+    $ref: paths/api_comics_{id}.yaml
+  /api/genres:
+    $ref: paths/api_genres.yaml
+  /api/genres/{id}:
+    $ref: paths/api_genres_{id}.yaml
+  /api/ratings:
+    $ref: paths/api_ratings.yaml
+  /api/ratings/{id}:
+    $ref: paths/api_ratings_{id}.yaml
+  /api/reading-list:
+    $ref: paths/api_reading-list.yaml
+  /api/reading-list/{id}:
+    $ref: paths/api_reading-list_{id}.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
