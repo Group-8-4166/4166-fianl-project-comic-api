@@ -8,8 +8,8 @@
     "start": "node src/server.js",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:generate": "npx prisma generate",
-    "bundle:openapi": "npx @redocly/cli bundle src/docs/openapi.yaml -o public/bundled.yaml",
-    "seed": "node scripts/seeds.js",
+    "bundle:openapi": "npx @redocly/cli bundle docs/openapi.yaml -o public/bundled.yaml",
+    "seed": "node prisma/seeds.js",
     "migrate:reset": "npx prisma migrate reset --force"
   },
   "keywords": [],

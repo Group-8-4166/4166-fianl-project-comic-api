@@ -1,0 +1,35 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 10
+  rating:
+    type: integer
+    example: 5
+  description:
+    type: string
+    example: Amazing! I would recommend
+  createdAt:
+    type: string
+    format: date-time
+  userId:
+    type: integer
+  comicId:
+    type: integer
+  author:
+    $ref: ./User.yaml
+  comic:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      author:
+        type: string
+      publisher:
+        type: string
+      releaseYear:
+        type: integer
+      description:
+        type: string

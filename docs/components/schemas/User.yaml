@@ -1,0 +1,14 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 12
+  email:
+    type: string
+    example: test@example.com
+  role:
+    type: string
+    enum:
+      - USER
+      - ADMIN
+    example: USER

@@ -1,0 +1,32 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 13
+  genre:
+    type: string
+    example: Action
+  comics:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 14
+        title:
+          type: string
+          example:
+            Batman: Year One
+        author:
+          type: string
+          example: Frank Miller
+        publisher:
+          type: string
+          example: DC Comics
+        releaseYear:
+          type: integer
+          example: 1987
+        description:
+          type: string
+          example: Bruce Wayne returns to Gotham City and becomes Batman...

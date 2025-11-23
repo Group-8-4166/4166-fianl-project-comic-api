@@ -1,0 +1,34 @@
+get:
+  tags:
+    - reading-list
+  summary: Get a reading list entry by ID
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+  responses:
+    '200':
+      description: Reading entry details
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ReadingEntry.yaml
+delete:
+  tags:
+    - reading-list
+  summary: Remove a comic from the reading list
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+  responses:
+    '204':
+      description: Entry removed from reading list
