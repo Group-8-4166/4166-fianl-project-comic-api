@@ -38,7 +38,6 @@
     "express-validator": "^7.3.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "latest": "^0.2.0",
     "swagger-ui-express": "^5.0.1",
     "yamljs": "^0.3.0"
   },
