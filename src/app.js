@@ -17,6 +17,9 @@ import readingListRoutes from "./routes/readingListRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// UNIVERSAL PATH: Works locally AND on Render
+const projectRoot = path.resolve(__dirname, "..");
+
 const app = express();
 
 if (process.env.NODE_ENV === "development") {
@@ -41,7 +44,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/reading-list", readingListRoutes);
 
 // Swagger/OpenAPI
-const openapiDoc = YAML.load(path.join(__dirname, "./public/bundled.yaml"));
+// const openapiDoc = YAML.load(path.join(__dirname, "../public/bundled.yaml"));
+// app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
+
+const openapiDoc = YAML.load(
+  path.join(projectRoot, "/public", "bundled.yaml")
+);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
 
 // 404 handler
