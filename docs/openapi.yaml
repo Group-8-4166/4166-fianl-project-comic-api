@@ -12,7 +12,7 @@ info:
 servers:
   - url: http://localhost:8080
     description: Local development server
-  - url: https://your-render-app.onrender.com
+  - url: https://four166-fianl-project-comic-api.onrender.com
     description: Render deployment environment
 paths:
   /api/auth/signup:
