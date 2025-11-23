@@ -149,8 +149,8 @@ You can split and bundle your OpenAPI files for modular API documentation.
 ### Commands Used
 
 ```bash
-npx @redocly/cli split src/docs/openapi.yaml --outDir src/docs/
-npx @redocly/cli bundle src/docs/openapi.yaml -o public/bundled.yaml
+npx @redocly/cli split docs/openapi.yaml --outDir docs/
+npx @redocly/cli bundle docs/openapi.yaml -o public/bundled.yaml
 ```
 
 ---
@@ -180,7 +180,7 @@ You can import the ready-made Postman collection to test all endpoints easily.
 After running the server, open your browser:
 
 - Local: [http://localhost:8080/api/docs] or [http://localhost:3000/api/docs]  
-- Or Render Deployment: `https://<your-render-app>.onrender.com/api/docs`
+- Or Render Deployment: `https://four166-fianl-project-comic-api.onrender.com/api/docs`
 
 ---
 
@@ -212,11 +212,11 @@ git push origin main
 ### 3. Verify Deployment
 
 Render will show your deployed URL, e.g.:  
-`https://comicbook-api.onrender.com`
+`https://four166-fianl-project-comic-api.onrender.com`
 
 Then visit:
-- API: [https://comicbook-api.onrender.com/api/comics](https://comicbook-api.onrender.com/api/comics)  
-- Docs: [https://comicbook-api.onrender.com/api/docs](https://comicbook-api.onrender.com/api/docs)
+- API: [https://four166-fianl-project-comic-api.onrender.com](https://https://four166-fianl-project-comic-api.onrender.com/api/comics)  
+- Docs: [https://four166-fianl-project-comic-api.onrender.com/api/docs](https://four166-fianl-project-comic-api.onrender.com/api/docs)
 
 ---
 
