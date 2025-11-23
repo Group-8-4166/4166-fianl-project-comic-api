@@ -41,7 +41,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/reading-list", readingListRoutes);
 
 // Swagger/OpenAPI
-const openapiDoc = YAML.load(path.join(__dirname, "../public/bundled.yaml"));
+const openapiDoc = YAML.load(path.join(__dirname, "./public/bundled.yaml"));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
 
 // 404 handler
