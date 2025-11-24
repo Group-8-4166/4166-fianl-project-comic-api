@@ -44,6 +44,11 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+// Root route to stop Render from triggering 404 errors
+app.get("/", (req, res) => {
+  res.send("ComicBook API is running!");
+});
+
 // API routes
 app.use("/api/comics", comicRoutes);
 app.use("/api/genres", genreRoutes);
